@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — Breach Guardian by SecurityIndeed</title>
+  <style>
+    :root {
+      --bg-primary: #0f1117;
+      --bg-secondary: #1a1d27;
+      --bg-card: #21242f;
+      --text-primary: #e8eaed;
+      --text-secondary: #9aa0a6;
+      --accent: #6c9eff;
+      --accent-hover: #8bb4ff;
+      --border: #2d3140;
+      --success: #34a853;
+      --warning: #fbbc04;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    .container {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+
+    header .subtitle {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    header .last-updated {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 4px 14px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: var(--accent);
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      margin-top: 40px;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-top: 28px;
+      margin-bottom: 12px;
+      color: var(--accent);
+    }
+
+    p {
+      margin-bottom: 14px;
+      color: var(--text-secondary);
+    }
+
+    ul, ol {
+      margin-bottom: 14px;
+      padding-left: 24px;
+    }
+
+    li {
+      margin-bottom: 8px;
+      color: var(--text-secondary);
+    }
+
+    strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .highlight-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--success);
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin: 20px 0;
+    }
+
+    .highlight-box p {
+      margin-bottom: 0;
+      color: var(--text-primary);
+    }
+
+    .warning-box {
+      border-left-color: var(--warning);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px;
+      background: var(--bg-card);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.95rem;
+    }
+
+    th {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    td {
+      color: var(--text-secondary);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--accent-hover);
+      text-decoration: underline;
+    }
+
+    footer {
+      margin-top: 64px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .toc {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin: 20px 0 32px;
+    }
+
+    .toc h3 {
+      margin-top: 0;
+      color: var(--text-primary);
+    }
+
+    .toc ol {
+      padding-left: 20px;
+      margin-bottom: 0;
+    }
+
+    .toc li {
+      margin-bottom: 4px;
+    }
+
+    .toc a {
+      color: var(--text-secondary);
+    }
+
+    .toc a:hover {
+      color: var(--accent);
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 24px 16px 48px;
+      }
+      header h1 {
+        font-size: 1.6rem;
+      }
+      h2 {
+        font-size: 1.2rem;
+      }
+      table {
+        font-size: 0.85rem;
+      }
+      th, td {
+        padding: 10px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Privacy Policy</h1>
+      <p class="subtitle">Breach Guardian by SecurityIndeed</p>
+      <span class="last-updated">Effective Date: March 22, 2026</span>
+    </header>
+
+    <p>SecurityIndeed ("we," "us," or "our") operates the Breach Guardian mobile application and the Breach Guardian web dashboard (collectively, the "Service"). This Privacy Policy explains how we collect, use, store, and protect your information when you use our Service.</p>
+
+    <p>By downloading, installing, accessing, or using any part of the Service, you acknowledge that you have read, understood, and agree to the practices described in this Privacy Policy. If you do not agree with any part of this policy, please do not use the Service.</p>
+
+    <div class="highlight-box">
+      <p><strong>Our Core Promise:</strong> The Breach Guardian mobile app performs all message scanning and threat detection entirely on your device. Your messages, SMS content, and email text are never transmitted to any server. We cannot read, access, decrypt, or store your message content. This is not a policy choice — it is a technical architecture decision. The app simply has no code path to transmit your messages anywhere.</p>
+    </div>
+
+    <nav class="toc">
+      <h3>Table of Contents</h3>
+      <ol>
+        <li><a href="#collect">Information We Collect</a></li>
+        <li><a href="#not-collect">Information We Do NOT Collect</a></li>
+        <li><a href="#use">How We Use Your Information</a></li>
+        <li><a href="#not-use">How We Do NOT Use Your Information</a></li>
+        <li><a href="#third-party">Third-Party Services</a></li>
+        <li><a href="#retention">Data Retention</a></li>
+        <li><a href="#security">Data Security</a></li>
+        <li><a href="#rights">Your Rights</a></li>
+        <li><a href="#us-state">U.S. State Privacy Rights</a></li>
+        <li><a href="#international">International Data Transfers</a></li>
+        <li><a href="#children">Children's Privacy</a></li>
+        <li><a href="#breach-notification">Data Breach Notification</a></li>
+        <li><a href="#dnt">Do Not Track</a></li>
+        <li><a href="#changes">Changes to This Policy</a></li>
+        <li><a href="#contact">Contact Us</a></li>
+      </ol>
+    </nav>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <h2 id="collect">1. Information We Collect</h2>
+
+    <p>Breach Guardian operates as two distinct components with fundamentally different data models:</p>
+
+    <h3>1.1 Mobile Application (Breach Guardian App)</h3>
+
+    <div class="highlight-box">
+      <p><strong>We collect nothing.</strong> The mobile app is designed to operate with zero data transmission to our servers or any third party. There is no telemetry, no analytics, no crash reporting, no usage tracking, and no network calls of any kind during message scanning or any other app operation.</p>
+    </div>
+
+    <p>Specifically, the mobile app:</p>
+    <ul>
+      <li>Does <strong>not</strong> transmit SMS, MMS, or email content to any server</li>
+      <li>Does <strong>not</strong> send device identifiers, advertising IDs, or hardware fingerprints</li>
+      <li>Does <strong>not</strong> collect or transmit usage statistics, diagnostics, or behavioral data</li>
+      <li>Does <strong>not</strong> include any third-party analytics SDKs (no Google Analytics, Firebase, Mixpanel, Amplitude, or similar)</li>
+      <li>Does <strong>not</strong> include any advertising frameworks, ad networks, or trackers</li>
+      <li>Does <strong>not</strong> perform crash reporting to external services</li>
+      <li>Does <strong>not</strong> upload your contacts, call logs, or address book</li>
+      <li>Does <strong>not</strong> access your location, camera, or microphone</li>
+      <li>Stores all scan results, detection history, and user preferences in local on-device storage only</li>
+      <li>Uses on-device machine learning models that run entirely within the app process with no network dependency</li>
+    </ul>
+
+    <p>The app requires SMS read permission (Android) solely to scan messages locally on your device for spam and phishing threats. This permission is never used to transmit message content off-device. You can revoke this permission at any time through your device settings.</p>
+
+    <h3>1.2 Web Dashboard (Breach Guardian Web)</h3>
+
+    <p>The web dashboard provides breach monitoring and data broker removal services. To deliver these features, we collect and process the following:</p>
+
+    <table>
+      <tr>
+        <th>Data Type</th>
+        <th>Purpose</th>
+        <th>Legal Basis</th>
+        <th>Storage</th>
+      </tr>
+      <tr>
+        <td><strong>Email address</strong></td>
+        <td>Account creation, breach monitoring via Have I Been Pwned (HIBP) API</td>
+        <td>Contract performance</td>
+        <td>PostgreSQL database, encrypted at rest</td>
+      </tr>
+      <tr>
+        <td><strong>Password</strong></td>
+        <td>Account authentication</td>
+        <td>Contract performance</td>
+        <td>One-way bcrypt hash only; plaintext never stored</td>
+      </tr>
+      <tr>
+        <td><strong>Breach results</strong></td>
+        <td>Displaying your breach history and monitoring for new exposures</td>
+        <td>Contract performance</td>
+        <td>PostgreSQL database, encrypted at rest</td>
+      </tr>
+      <tr>
+        <td><strong>Data broker removal requests</strong></td>
+        <td>Coordinating removal of your personal information from data broker sites via Optery API</td>
+        <td>Contract performance, explicit consent</td>
+        <td>PostgreSQL database, encrypted at rest</td>
+      </tr>
+      <tr>
+        <td><strong>Session tokens</strong></td>
+        <td>Maintaining your authenticated session</td>
+        <td>Contract performance</td>
+        <td>Temporary; expire automatically</td>
+      </tr>
+    </table>
+
+    <p>All data stored in our database is encrypted at rest. All communication between your browser and our servers is encrypted in transit via TLS 1.2 or higher.</p>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <h2 id="not-collect">2. Information We Do NOT Collect</h2>
+
+    <p>To be absolutely clear, the following data is <strong>never</strong> collected, transmitted, stored, or accessed by SecurityIndeed from either the mobile app or web dashboard:</p>
+
+    <ul>
+      <li><strong>Message content:</strong> SMS, MMS, email body text, or any communication content</li>
+      <li><strong>Call recordings or audio:</strong> We do not record, intercept, or transmit any voice calls</li>
+      <li><strong>Contact lists or address books:</strong> We never upload or access your contacts</li>
+      <li><strong>Location data:</strong> We do not access GPS, Wi-Fi, or cell tower location information</li>
+      <li><strong>Browsing history:</strong> We do not track websites you visit</li>
+      <li><strong>Photos, videos, or files:</strong> We do not access your media library or file system</li>
+      <li><strong>Biometric data:</strong> We do not collect fingerprints, face data, or voice prints</li>
+      <li><strong>Financial information:</strong> We do not collect bank account numbers, credit card numbers, or financial data (except via third-party payment processors if you purchase a paid plan)</li>
+      <li><strong>Social Security numbers or government IDs:</strong> We never collect government identification numbers</li>
+      <li><strong>Device advertising identifiers:</strong> We do not read or transmit your IDFA, GAID, or similar advertising IDs</li>
+      <li><strong>Keystroke data:</strong> We do not log keystrokes or input patterns</li>
+      <li><strong>Installed applications:</strong> We do not scan or report what other apps are on your device</li>
+    </ul>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <h2 id="use">3. How We Use Your Information</h2>
+
+    <p>We use the information collected through the web dashboard exclusively to:</p>
+    <ul>
+      <li>Check your email address against known data breaches via the HIBP API</li>
+      <li>Display breach results and notify you of new exposures</li>
+      <li>Process and track data broker removal requests through the Optery API</li>
+      <li>Authenticate your identity and secure your account</li>
+      <li>Respond to your support requests</li>
+      <li>Comply with applicable legal obligations</li>
+    </ul>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <h2 id="not-use">4. How We Do NOT Use Your Information</h2>
+
+    <div class="highlight-box warning-box">
+      <p><strong>We Do Not Sell Your Data.</strong> SecurityIndeed does not sell, rent, lease, trade, or otherwise disclose your personal information to third parties for monetary or other valuable consideration. We have never sold personal information. We will never sell personal information. This applies to all users, regardless of location.</p>
+    </div>
+
+    <p>Additionally, we do <strong>not</strong>:</p>
+    <ul>
+      <li>Use your data for advertising, ad targeting, or marketing profiling</li>
+      <li>Share your data with advertisers or data brokers</li>
+      <li>Use your email address for unsolicited marketing without your explicit opt-in consent</li>
+      <li>Mine, analyze, or aggregate your data for purposes unrelated to providing the Service</li>
+      <li>Train machine learning models on your personal data on our servers</li>
+      <li>Create behavioral profiles or track you across services</li>
+      <li>Share your data with law enforcement or government agencies unless required by valid legal process (subpoena, court order, or equivalent legal mechanism)</li>
+    </ul>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <h2 id="third-party">5. Third-Party Services</h2>
+
+    <p>The web dashboard integrates with the following third-party services to deliver its core features:</p>
+
+    <table>
+      <tr>
+        <th>Service</th>
+        <th>Purpose</th>
+        <th>Data Shared</th>
+        <th>Their Privacy Policy</th>
+      </tr>
+      <tr>
+        <td><strong>Have I Been Pwned (HIBP)</strong></td>
+        <td>Checking if your email appears in known data breaches</td>
+        <td>Email address (via k-anonymity model where possible)</td>
+        <td><a href="https://haveibeenpwned.com/Privacy" rel="noopener noreferrer">haveibeenpwned.com/Privacy</a></td>
+      </tr>
+      <tr>
+        <td><strong>Optery</strong></td>
+        <td>Automated removal of your personal data from data broker websites</td>
+        <td>Information necessary to identify and remove your data broker listings (only with your explicit consent)</td>
+        <td><a href="https://www.optery.com/privacy-policy" rel="noopener noreferrer">optery.com/privacy-policy</a></td>
+      </tr>
+    </table>
+
+    <p>We do not integrate any advertising networks, social media trackers, social login providers, behavioral analytics services, or similar third-party tracking technologies in any part of the Service.</p>
+
+    <p>We are not responsible for the privacy practices of any third-party website, service, or API to which we may link or integrate. We encourage you to review the privacy policies of any third-party services before providing them with your information.</p>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <h2 id="retention">6. Data Retention</h2>
+
+    <h3>6.1 Mobile App</h3>
+    <p>Scan history and detection results stored on your device are <strong>automatically deleted after 90 days</strong> by the app. You may also manually clear all data at any time from Settings. Since this data never leaves your device, deletion is immediate, permanent, and irreversible. When you uninstall the app, all locally stored data is removed with it.</p>
+
+    <h3>6.2 Web Dashboard</h3>
+    <p>Your account data, breach results, and removal request history are retained for as long as your account is active. Upon receiving a deletion request:</p>
+    <ul>
+      <li>We will remove all of your personal data from our active systems within <strong>30 days</strong></li>
+      <li>Backup copies will be purged within <strong>90 days</strong></li>
+      <li>Data required for legal compliance, dispute resolution, or fraud prevention may be retained for up to <strong>3 years</strong> after account deletion, after which it is permanently destroyed</li>
+    </ul>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <h2 id="security">7. Data Security</h2>
+
+    <p>We implement commercially reasonable administrative, technical, and physical security measures to protect your information, including:</p>
+    <ul>
+      <li><strong>Encryption at rest:</strong> All data in our PostgreSQL database is encrypted using AES-256</li>
+      <li><strong>Encryption in transit:</strong> All connections use TLS 1.2 or higher</li>
+      <li><strong>Password security:</strong> Passwords are hashed using bcrypt with appropriate cost factor and are never stored in plaintext</li>
+      <li><strong>On-device processing:</strong> The mobile app's architecture eliminates the risk of server-side data breaches for your message content, because that content never reaches any server</li>
+      <li><strong>Minimal data collection:</strong> We collect only what is strictly necessary to provide the Service</li>
+      <li><strong>Access controls:</strong> Database access is restricted to authorized systems and personnel on a need-to-know basis</li>
+    </ul>
+
+    <div class="highlight-box warning-box">
+      <p><strong>No Absolute Guarantee.</strong> While we take security seriously and implement industry-standard protections, no method of electronic transmission or storage is 100% secure. We cannot guarantee the absolute security of your information transmitted to or stored by the web dashboard. Any transmission of personal information is at your own risk.</p>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <h2 id="rights">8. Your Rights</h2>
+
+    <h3>8.1 Rights Under GDPR (European Economic Area, United Kingdom, and Switzerland)</h3>
+    <p>If you are located in the European Economic Area, United Kingdom, or Switzerland, you have the following rights under the General Data Protection Regulation (GDPR) and equivalent local laws:</p>
+    <ul>
+      <li><strong>Right of access (Art. 15):</strong> Request a copy of the personal data we hold about you</li>
+      <li><strong>Right to rectification (Art. 16):</strong> Request correction of inaccurate or incomplete personal data</li>
+      <li><strong>Right to erasure (Art. 17):</strong> Request deletion of your personal data ("right to be forgotten")</li>
+      <li><strong>Right to restrict processing (Art. 18):</strong> Request that we limit how we use your data</li>
+      <li><strong>Right to data portability (Art. 20):</strong> Receive your data in a structured, commonly used, machine-readable format</li>
+      <li><strong>Right to object (Art. 21):</strong> Object to processing of your personal data based on legitimate interests</li>
+      <li><strong>Right to withdraw consent (Art. 7):</strong> Withdraw consent at any time where processing is based on consent, without affecting the lawfulness of prior processing</li>
+      <li><strong>Right to lodge a complaint:</strong> You have the right to lodge a complaint with your local supervisory authority (data protection authority)</li>
+    </ul>
+
+    <p><strong>Legal bases for processing:</strong> We process personal data on the web dashboard under the following legal bases:</p>
+    <ul>
+      <li><strong>Performance of a contract:</strong> To provide the breach monitoring and data broker removal services you signed up for</li>
+      <li><strong>Consent:</strong> Where you have explicitly opted in to data broker removal services</li>
+      <li><strong>Legitimate interests:</strong> To maintain the security and integrity of our Service, and to respond to your support requests</li>
+      <li><strong>Legal obligation:</strong> To comply with applicable laws and regulations</li>
+    </ul>
+
+    <h3>8.2 Rights Under Brazilian LGPD</h3>
+    <p>If you are located in Brazil, you have similar rights under the Lei Geral de Protecao de Dados (LGPD), including the right to confirmation of processing, access, correction, anonymization, portability, deletion, information about sharing, and the right to revoke consent.</p>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <h2 id="us-state">9. U.S. State Privacy Rights</h2>
+
+    <h3>9.1 California (CCPA/CPRA)</h3>
+    <p>If you are a California resident, the California Consumer Privacy Act as amended by the California Privacy Rights Act (CCPA/CPRA) provides you with the following rights:</p>
+    <ul>
+      <li><strong>Right to know:</strong> Request disclosure of the categories and specific pieces of personal information we have collected, the sources, the business purposes, and the categories of third parties with whom we share it</li>
+      <li><strong>Right to delete:</strong> Request deletion of your personal information, subject to certain exceptions</li>
+      <li><strong>Right to correct:</strong> Request correction of inaccurate personal information</li>
+      <li><strong>Right to opt-out of sale or sharing:</strong> We do <strong>not</strong> sell or share (as defined by the CCPA) your personal information. We have never sold or shared personal information, and we will never do so</li>
+      <li><strong>Right to limit use of sensitive personal information:</strong> We do not collect sensitive personal information as defined by the CCPA</li>
+      <li><strong>Right to non-discrimination:</strong> We will not discriminate against you for exercising any of your CCPA rights</li>
+    </ul>
+
+    <p><strong>Categories of personal information collected</strong> (web dashboard only): Identifiers (email address); Internet or electronic network activity (session data); Professional information (none).</p>
+
+    <p><strong>Categories sold or shared:</strong> None. We do not sell or share personal information.</p>
+
+    <p>To exercise your rights, contact us at <a href="mailto:support@securityindeed.org">support@securityindeed.org</a>. We will verify your identity before processing your request. We will respond within 45 days, with a possible 45-day extension if reasonably necessary.</p>
+
+    <h3>9.2 Other U.S. States</h3>
+    <p>If you are a resident of Colorado, Connecticut, Delaware, Indiana, Iowa, Montana, New Hampshire, New Jersey, Oregon, Tennessee, Texas, Utah, or Virginia, you may have similar rights under your state's privacy law, including rights to access, delete, correct, and opt out of the sale of personal data or targeted advertising. We do not sell your data, engage in targeted advertising, or profile you for decisions that produce legal or similarly significant effects. To exercise any applicable rights, contact us at <a href="mailto:support@securityindeed.org">support@securityindeed.org</a>.</p>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <h2 id="international">10. International Data Transfers</h2>
+
+    <p>If you access the web dashboard from outside the United States, your information may be transferred to, stored, and processed in the United States where our servers are located. By using the web dashboard, you consent to the transfer of your information as described in this policy.</p>
+
+    <p>For users in the EEA, UK, or Switzerland, we ensure that transfers of personal data outside of these jurisdictions are protected by appropriate safeguards, including Standard Contractual Clauses (SCCs) approved by the European Commission, or other legally recognized transfer mechanisms.</p>
+
+    <p>The mobile app does not transfer any data internationally or otherwise, as all processing occurs locally on your device.</p>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <h2 id="children">11. Children's Privacy</h2>
+
+    <p>The Service is not directed to, and not intended for use by, children under the age of 13 (or 16 in the European Economic Area, United Kingdom, and Switzerland). We do not knowingly collect personal information from children under these ages.</p>
+
+    <p>If you are a parent or guardian and you believe your child has provided us with personal information, please contact us immediately at <a href="mailto:support@securityindeed.org">support@securityindeed.org</a>. If we learn that we have inadvertently collected personal information from a child under the applicable minimum age, we will take steps to delete such information promptly.</p>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <h2 id="breach-notification">12. Data Breach Notification</h2>
+
+    <p>In the unlikely event that a security breach affects your personal data stored on our web dashboard servers, we commit to:</p>
+    <ul>
+      <li>Notifying affected users by email within <strong>72 hours</strong> of becoming aware of the breach</li>
+      <li>Notifying the relevant supervisory authority where required by GDPR or applicable law</li>
+      <li>Providing a description of the nature of the breach, the categories and approximate number of users affected, the likely consequences, and the measures taken or proposed to address the breach</li>
+    </ul>
+
+    <p><strong>Note regarding the mobile app:</strong> Because the mobile app stores all data exclusively on your device and never transmits data to our servers, a breach of our infrastructure cannot expose your mobile app data. Your messages, scan results, and locally stored information are not at risk from any server-side incident.</p>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <h2 id="dnt">13. Do Not Track</h2>
+
+    <p>The Service does not track you. We do not use cookies, web beacons, pixel tags, or similar tracking technologies in the mobile app. The web dashboard uses only essential session cookies required for authentication — no tracking cookies, no analytics cookies, and no advertising cookies. We honor Do Not Track ("DNT") signals by default because we simply do not track.</p>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <h2 id="changes">14. Changes to This Privacy Policy</h2>
+
+    <p>We may update this Privacy Policy from time to time. When we make changes:</p>
+    <ul>
+      <li><strong>Material changes:</strong> We will notify you by email (if you have a web dashboard account), by prominent notice within the Service, and by updating the "Effective Date" at the top of this page at least <strong>30 days</strong> before the changes take effect</li>
+      <li><strong>Non-material changes:</strong> We will update the "Effective Date" and post the revised policy</li>
+    </ul>
+
+    <p>Your continued use of the Service after the effective date of any changes constitutes your acceptance of the revised Privacy Policy. If you disagree with any changes, you must discontinue use of the Service and request deletion of your account.</p>
+
+    <p>We encourage you to review this policy periodically. Prior versions of this policy are available upon request.</p>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <h2 id="contact">15. Contact Us</h2>
+
+    <p>If you have questions about this Privacy Policy, wish to exercise any of your data rights, or have concerns about how your information is handled, please contact us:</p>
+
+    <ul>
+      <li><strong>Privacy inquiries:</strong> <a href="mailto:support@securityindeed.org">support@securityindeed.org</a></li>
+      <li><strong>General support:</strong> <a href="mailto:support@securityindeed.org">support@securityindeed.org</a></li>
+    </ul>
+
+    <p>SecurityIndeed is operated by Reddy LLC, a limited liability company registered in the State of Minnesota, United States.</p>
+
+    <p>We aim to respond to all data rights requests within <strong>30 days</strong> (45 days for CCPA requests, with a possible extension). If you are in the EEA, UK, or Switzerland and are unsatisfied with our response, you have the right to lodge a complaint with your local data protection authority.</p>
+
+    <footer>
+      <p>&copy; 2026 Reddy LLC d/b/a SecurityIndeed. All rights reserved.</p>
+      <p>Breach Guardian is a product of SecurityIndeed, operated by Reddy LLC.</p>
+      <p style="margin-top: 8px;"><a href="terms-of-service.html">Terms of Service</a></p>
+    </footer>
+  </div>
+</body>
+</html>
