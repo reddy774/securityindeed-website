@@ -298,6 +298,43 @@
         .cta-section h2 { color: var(--frost); font-size: clamp(1.8rem, 3vw, 2.4rem); margin-bottom: 12px; }
         .cta-section p { color: var(--fortress-300); margin-bottom: 28px; font-size: 1.05rem; }
 
+        /* ── Store Badges ──────────────────────────────────────── */
+        .store-row {
+            display: flex; gap: 14px; flex-wrap: wrap; align-items: center;
+        }
+        .store-badge {
+            display: inline-flex; align-items: center; gap: 12px;
+            background: var(--fortress-950); color: white; text-decoration: none;
+            padding: 12px 22px; border-radius: 12px;
+            transition: transform 0.15s, box-shadow 0.15s;
+            min-width: 180px;
+        }
+        .store-badge:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(11,49,66,0.18); }
+        .store-badge svg { flex-shrink: 0; }
+        .store-badge .store-line1 { display: block; font-size: 0.65rem; font-weight: 400; opacity: 0.85; line-height: 1; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.04em; }
+        .store-badge .store-line2 { display: block; font-size: 1.05rem; font-weight: 600; line-height: 1; }
+        .store-badge.coming { background: var(--fortress-700); }
+        .store-badge.coming::after { content: "Soon"; font-size: 0.6rem; background: var(--amber); color: var(--fortress-950); padding: 2px 6px; border-radius: 4px; margin-left: auto; font-weight: 700; }
+
+        .download-section {
+            padding: 80px 0;
+            background: linear-gradient(180deg, var(--frost) 0%, var(--white) 100%);
+        }
+        .download-card {
+            max-width: 760px; margin: 0 auto;
+            background: var(--white); border: 1px solid rgba(11,49,66,0.08);
+            border-radius: 24px; padding: 48px 40px; text-align: center;
+            box-shadow: 0 20px 48px rgba(11,49,66,0.08);
+        }
+        .download-card h2 { font-size: clamp(1.8rem, 3vw, 2.4rem); margin-bottom: 12px; }
+        .download-card > p { color: var(--fortress-600); font-size: 1.05rem; margin-bottom: 28px; }
+        .download-card .store-row { justify-content: center; }
+        .download-meta {
+            margin-top: 24px; font-size: 0.82rem; color: var(--fortress-500);
+            display: flex; gap: 18px; justify-content: center; flex-wrap: wrap;
+        }
+        .download-meta span { display: inline-flex; align-items: center; gap: 6px; }
+
         /* ── Footer ────────────────────────────────────────────── */
         footer { padding: 32px 0; border-top: 1px solid rgba(11,49,66,0.06); text-align: center; color: var(--fortress-500); font-size: 0.82rem; }
         footer a { color: var(--fortress-700); text-decoration: none; }
@@ -339,7 +376,8 @@
             <a href="#how-it-works">How It Works</a>
             <a href="#features">Features</a>
             <a href="#pricing">Pricing</a>
-            <a href="/login" class="nav-cta">Get Protected</a>
+            <a href="#download">Download</a>
+            <a href="#download" class="nav-cta">Get Protected</a>
         </div>
     </div>
 </nav>
@@ -357,11 +395,27 @@
                 Our mobile app uses on-device AI to catch phishing and spam before they reach you — nothing leaves your phone. Our web dashboard monitors breaches and removes your data from broker sites.
             </p>
             <div class="hero-actions">
-                <a href="/login" class="btn btn-dark">
-                    Start Free Scan
+                <a href="#download" class="btn btn-dark">
+                    Get the App
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
                 <a href="#how-it-works" class="btn btn-outline">See How It Works</a>
+            </div>
+            <div class="store-row" style="margin-top:22px;">
+                <a href="https://apps.apple.com/app/id6761661073" class="store-badge" aria-label="Download on the App Store">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M17.05 12.04c-.03-2.94 2.4-4.36 2.51-4.43-1.37-2-3.5-2.28-4.26-2.31-1.81-.18-3.54 1.07-4.46 1.07-.94 0-2.35-1.05-3.86-1.02-1.99.03-3.82 1.16-4.85 2.94-2.07 3.59-.53 8.91 1.49 11.83.99 1.43 2.17 3.04 3.71 2.98 1.49-.06 2.05-.97 3.85-.97 1.79 0 2.31.97 3.88.94 1.6-.03 2.62-1.45 3.6-2.89 1.13-1.66 1.6-3.27 1.62-3.36-.04-.02-3.11-1.19-3.13-4.78zM14.27 3.6c.81-1 1.36-2.37 1.21-3.74-1.17.05-2.6.78-3.44 1.76-.75.86-1.41 2.27-1.23 3.61 1.31.1 2.65-.66 3.46-1.63z"/></svg>
+                    <span>
+                        <span class="store-line1">Download on the</span>
+                        <span class="store-line2">App Store</span>
+                    </span>
+                </a>
+                <a href="https://play.google.com/store/apps/details?id=com.breachguardian.app" class="store-badge" aria-label="Get it on Google Play">
+                    <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#34a853" d="M12.954 11.616l2.957-2.957L6.36 3.291c-.633-.342-1.226-.39-1.746-.16l8.34 8.485z"/><path fill="#fbbc04" d="M16.295 9.018l-3.342 3.39 3.342 3.39 3.469-1.886c.987-.546.987-1.986 0-2.532l-3.469-1.886-.001.524z"/><path fill="#ea4335" d="M4.614 3.131c-.232.099-.426.235-.598.434C3.727 3.879 3.6 4.193 3.6 4.6v14.8c0 .407.127.721.416.97L13.6 11.5 4.614 3.131z"/><path fill="#4285f4" d="M13.6 11.5L4.016 20.349c.519.225 1.108.176 1.741-.165l9.554-5.367L13.6 11.5z"/></svg>
+                    <span>
+                        <span class="store-line1">Get it on</span>
+                        <span class="store-line2">Google Play</span>
+                    </span>
+                </a>
             </div>
         </div>
 
@@ -609,7 +663,7 @@
                     <li><span class="mode-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span> Advanced settings &amp; filters</li>
                 </ul>
             </div>
-            <div class="mode-card mode-senior">
+            <div class="mode-card mode-comfort">
                 <h3>Easy Mode</h3>
                 <p>Large text, simplified navigation, and calm language. Designed with accessibility research from W3C WAI-AGE.</p>
                 <ul class="mode-list">
@@ -640,7 +694,7 @@
                     <li>Security training access</li>
                     <li>Mobile app (on-device scanning)</li>
                 </ul>
-                <a href="/login" class="btn btn-outline" style="font-size:0.95rem;">Start Free Scan</a>
+                <a href="#download" class="btn btn-outline" style="font-size:0.95rem;">Start Free Scan</a>
             </div>
             <div class="price-card featured">
                 <h3>Guardian</h3>
@@ -652,7 +706,7 @@
                     <li>Daily scan summaries</li>
                     <li>All security training courses</li>
                 </ul>
-                <a href="/login" class="btn btn-dark" style="font-size:0.95rem;">Get Protected</a>
+                <a href="#download" class="btn btn-dark" style="font-size:0.95rem;">Get Protected</a>
             </div>
             <div class="price-card">
                 <h3>Guardian Pro</h3>
@@ -665,7 +719,7 @@
                     <li>Priority support</li>
                     <li>Credit monitoring integration</li>
                 </ul>
-                <a href="/login" class="btn btn-outline" style="font-size:0.95rem;">Go Pro</a>
+                <a href="#download" class="btn btn-outline" style="font-size:0.95rem;">Go Pro</a>
             </div>
         </div>
     </div>
@@ -676,10 +730,51 @@
     <div class="container">
         <h2>Start protecting your identity today</h2>
         <p>Free breach scan. No credit card required.</p>
-        <a href="/login" class="btn btn-green" style="font-size:1.05rem;">
+        <a href="#download" class="btn btn-green" style="font-size:1.05rem;">
             Get Started Free
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
+    </div>
+</section>
+
+<!-- Download -->
+<section class="download-section" id="download">
+    <div class="container">
+        <div class="download-card anim">
+            <span class="section-label label-blue">Available now</span>
+            <h2>Get Breach Guardian on your phone</h2>
+            <p>Free to download. On-device AI scam detection runs without sending your messages anywhere.</p>
+            <div class="store-row">
+                <a href="https://apps.apple.com/app/id6761661073" class="store-badge" aria-label="Download on the App Store">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.05 12.04c-.03-2.94 2.4-4.36 2.51-4.43-1.37-2-3.5-2.28-4.26-2.31-1.81-.18-3.54 1.07-4.46 1.07-.94 0-2.35-1.05-3.86-1.02-1.99.03-3.82 1.16-4.85 2.94-2.07 3.59-.53 8.91 1.49 11.83.99 1.43 2.17 3.04 3.71 2.98 1.49-.06 2.05-.97 3.85-.97 1.79 0 2.31.97 3.88.94 1.6-.03 2.62-1.45 3.6-2.89 1.13-1.66 1.6-3.27 1.62-3.36-.04-.02-3.11-1.19-3.13-4.78zM14.27 3.6c.81-1 1.36-2.37 1.21-3.74-1.17.05-2.6.78-3.44 1.76-.75.86-1.41 2.27-1.23 3.61 1.31.1 2.65-.66 3.46-1.63z"/></svg>
+                    <span>
+                        <span class="store-line1">Download on the</span>
+                        <span class="store-line2">App Store</span>
+                    </span>
+                </a>
+                <a href="https://play.google.com/store/apps/details?id=com.breachguardian.app" class="store-badge" aria-label="Get it on Google Play">
+                    <svg width="26" height="26" viewBox="0 0 24 24"><path fill="#34a853" d="M12.954 11.616l2.957-2.957L6.36 3.291c-.633-.342-1.226-.39-1.746-.16l8.34 8.485z"/><path fill="#fbbc04" d="M16.295 9.018l-3.342 3.39 3.342 3.39 3.469-1.886c.987-.546.987-1.986 0-2.532l-3.469-1.886-.001.524z"/><path fill="#ea4335" d="M4.614 3.131c-.232.099-.426.235-.598.434C3.727 3.879 3.6 4.193 3.6 4.6v14.8c0 .407.127.721.416.97L13.6 11.5 4.614 3.131z"/><path fill="#4285f4" d="M13.6 11.5L4.016 20.349c.519.225 1.108.176 1.741-.165l9.554-5.367L13.6 11.5z"/></svg>
+                    <span>
+                        <span class="store-line1">Get it on</span>
+                        <span class="store-line2">Google Play</span>
+                    </span>
+                </a>
+            </div>
+            <div class="download-meta">
+                <span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+                    Free to download
+                </span>
+                <span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+                    No account required to scan
+                </span>
+                <span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+                    Works offline
+                </span>
+            </div>
+        </div>
     </div>
 </section>
 
