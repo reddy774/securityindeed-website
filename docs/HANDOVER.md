@@ -1244,4 +1244,47 @@ This HANDOVER.md file is the canonical spec. The others are context.
 
 ---
 
+### Phase 3 — Auth unification (Google OAuth) — COMPLETED 2026-04-13
+
+- **Status:** completed (code + infra)
+- **Started:** 2026-04-13
+- **Completed:** 2026-04-13
+- **Branch (in `breach-guardian/`):** `feat/phase-3-auth`
+- **Files created:**
+  - `app/(auth)/layout.tsx` — shared auth route-group layout (brand link + frost gradient)
+  - `app/(auth)/login/page.tsx` — Google primary CTA + email/password secondary, Suspense-wrapped for static prerender, OAuth error surfacing
+  - `app/(auth)/register/page.tsx` — Google primary CTA + register form, auto sign-in after POST /api/auth/register, field-level error surfacing
+  - `components/auth/GoogleSignInButton.tsx` — reusable client component, official Google G glyph, loading state
+  - `docs/phase-3-auth-migration.md` — the security invariant explained, migration path for existing users, local dev setup, OAuth consent screen Phase 9 action item, manual smoke test plan
+  - `docs/phase-3-evidence/phase-3-credentials-landing.png` — pre-creation screenshot of GCP Credentials page
+  - `docs/phase-3-evidence/phase-3-oauth-client-created.png` — post-creation screenshot showing the new OAuth client in the list
+- **Files modified:**
+  - `lib/auth/auth-options.ts` — added Google provider, PrismaAdapter, signIn callback with verified-email linking invariant, events.createUser hook to backfill schema-required columns
+  - `types/next-auth.d.ts` — added `provider?` field to Session.user and JWT
+  - `app/api/auth/register/route.ts` — normalized `role: 'USER'` → `role: 'user'` for consistency with schema default and OAuth users
+  - `package.json` / `package-lock.json` — added `@next-auth/prisma-adapter@^1.0.7`
+- **GCP changes:**
+  - **New OAuth 2.0 web client created** via Playwright automation in GCP Console: name `SecurityIndeed Portal — Web`, type Web application, project `new-project-security-emails`
+  - Client ID: `121591951720-38hp7m3eeimplkifttboo7hlggjj2978.apps.googleusercontent.com` (public)
+  - Client secret: written directly to Secret Manager via stdin (never touched a file on disk)
+  - Authorized JavaScript origins: `https://securityindeed.org`, `http://localhost:3000`
+  - Authorized redirect URIs: `https://securityindeed.org/api/auth/callback/google`, `http://localhost:3000/api/auth/callback/google`
+  - Secret Manager: `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` both updated to **version 2** with real values; **version 1 disabled** (Phase 1 placeholder)
+- **Security invariant implemented:** A Google OAuth sign-in may link to an existing user only if that user's `emailVerified` is non-null. This prevents an attacker who controls a matching Google account from hijacking a password-only user who never verified their email. Enforced in the `signIn` callback of `lib/auth/auth-options.ts`. Full pseudocode + rationale in `docs/phase-3-auth-migration.md`.
+- **Build verification:**
+  - `npx tsc --noEmit` → exit 0 (zero errors)
+  - `npx next build` → 18 routes compiled (up from 16 in Phase 2), /login and /register as static-prerendered pages with 108 kB First Load JS each
+- **Deviations from plan:**
+  1. Fixed a Next.js 14 static-prerender issue: `useSearchParams()` on `/login` required a `<Suspense>` boundary. Split the login page into `<LoginPage>` (outer Suspense wrapper) + `<LoginForm>` (inner component). Not in the HANDOVER plan but required for the build to succeed.
+  2. Normalized `role: 'USER'` → `'user'` in the pre-existing `/api/auth/register` route because the Prisma schema default is lowercase and my Phase 3 OAuth user creation uses lowercase. Small cleanup to prevent session role inconsistency.
+  3. Added a `provider?` field to the Session type (not strictly in the original plan) so the UI can later distinguish credentials sessions from OAuth sessions.
+- **Known issues carried forward:**
+  - **OAuth consent screen is in Testing mode.** Only explicitly-listed test users can currently complete Google sign-in. Must be set to Internal (Workspace-only) or Published (External) before production launch. **Phase 9 action item.**
+  - **Unit/integration/E2E tests deferred** — NextAuth callback fixtures are non-trivial; the full test suite is a follow-up PR.
+  - **Existing password-only users with `emailVerified = null`** cannot link Google until an email verification flow is built. **Phase 7 deliverable.**
+  - **SessionProvider not added to root layout** — login/register work without it because `signIn()` doesn't need client-side session state. When the dashboard is re-integrated (from `refactor/phase-5-wip` branch), SessionProvider should be added to the root layout so `useSession()` works in protected pages.
+- **Next phase:** Phase 4 — vendor-agnostic scrubbing abstraction + Optery or StubProvider
+
+---
+
 *End of handover document. Single file, self-contained, ready to hand off. All decisions are final. Execution log continues above as phases complete.*
