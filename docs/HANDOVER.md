@@ -1339,4 +1339,56 @@ This HANDOVER.md file is the canonical spec. The others are context.
 
 ---
 
+### Phase 4 — Vendor-agnostic data scrubbing — COMPLETED 2026-04-13
+
+- **Status:** completed (StubProvider MVP; real vendor wire-up deferred)
+- **Branch (in `breach-guardian/`):** `feat/phase-4-scrubbing`
+- **Files touched:** 28 in `breach-guardian/` (24 new, 4 modified)
+- **Full report:** `breach-guardian/docs/phase-4-scrubbing-notes.md`
+
+**What shipped:**
+- **`lib/scrubbing/` module:** vendor-agnostic `ScrubbingProvider` interface (enroll, update, scan, status, brokers, removals, webhook verify/parse, DSAR delete), `PIIProfile` cross-vendor type + Zod schema, `StubProvider` default implementation, `getProvider()` factory
+- **5 new Prisma models** + migration: `ScrubbingEnrollment`, `PiiProfile` (encrypted blob + keyVersion), `ScrubbingBroker`, `ScrubbingRemovalReceipt`, `ScrubbingEvent`. Legacy `RemovalRequest` marked DEPRECATED but retained.
+- **6 new routes under `/api/scrub/`:** `POST /submit` (auth + CSRF + Zod + AES-256-GCM encrypt + transactional write), `GET /status` (lazy vendor refresh), `GET /brokers`, `GET /history`, `POST /webhook` (HMAC-verified on raw bytes), `DELETE /enrollment` (DSAR — vendor deleteUser + PiiProfile physical delete + soft-delete enrollment to preserve audit logs)
+- **Dashboard shell:** `app/(dashboard)/layout.tsx` with auth redirect, `DashboardNav`, `SessionProviderWrapper` wrapping the root layout so client components can use `useSession()`, `/dashboard` home with feature cards
+- **Data-scrubbing pages:** `/dashboard/data-scrubbing` (form + status card + broker list) and `/dashboard/data-scrubbing/history` (event timeline)
+- **4 scrubbing components:** `ScrubForm` (React state + field-level errors from server Zod taxonomy), `ScrubStatusCard`, `BrokerList`, `EventTimeline`
+- **Middleware rate limits tightened** for `/api/scrub/submit` + `/api/scrub/enrollment` (5/15min, same bucket as auth routes) and `/api/scrub/webhook` (60/min to allow vendor burst)
+
+**GCP infrastructure:**
+- New `ENCRYPTION_KEY` secret in Secret Manager (32-byte AES-256 hex, generated via `openssl rand -hex 32` and pushed via stdin — never touched a file). `portal-runtime` SA granted access.
+- `KMS_KEY_RESOURCE_NAME` secret remains a placeholder — Phase 9 will upgrade from static DEK to Cloud KMS envelope encryption using this key.
+
+**Security discipline (applied Phase 3 remediation lessons):**
+- PII encrypted BEFORE DB write (AES-256-GCM via `lib/crypto/encryption.ts`)
+- PII never in logs, responses, or audit metadata — only opaque IDs
+- All state-changing POSTs/DELETEs use `assertSameOrigin()` CSRF guard
+- Every DB query scoped by `userId: auth.user.id` (no cross-user reads)
+- `requireAuth()` on every user-facing route; webhook uses HMAC via `provider.verifyWebhook(headers, rawBody)` on **raw bytes** (not parsed JSON)
+- `StubProvider.verifyWebhook` returns `false` unconditionally — prevents forged webhooks when stub is active
+- `prisma.$transaction()` on submit and webhook handlers (atomic enrollment+profile, atomic event+receipt+broker-update)
+- Client bundle grep → zero hits on `ENCRYPTION_KEY`, `SCRUBBING_WEBHOOK_SECRET`, `GOCSPX`, `pwnedpasswords`
+
+**Build verification:**
+- `npx tsc --noEmit` → exit 0
+- `npx next build` → 27/27 static pages compiled
+  - `/dashboard/data-scrubbing`: 2.41 kB / 98.4 kB First Load JS
+  - All 6 `/api/scrub/*` routes compiled as dynamic handlers
+  - All dashboard pages dynamic (expected — layout does `getServerSession()`)
+  - All marketing pages still static (no regression)
+
+**Documented known gaps (carried to later phases):**
+- Real OpteryProvider implementation (Phase 7 or contract signing)
+- Webhook replay protection (nonce/timestamp — Phase 7 before real vendor wire-up)
+- Cloud KMS envelope encryption (Phase 9)
+- Encryption key rotation script (Phase 9)
+- Audit log retention policy (Phase 7)
+- Retirement of legacy `/api/brokers/remove` + `RemovalRequest` (Phase 7)
+- Full dashboard shell from `refactor/phase-5-wip` (Phase 5 or 8)
+- Real HIBP API key for breach monitoring (Phase 5)
+
+**Next phase:** Phase 5 — RevenueCat + Stripe billing (independent of scrubbing; can also run in parallel with Phase 6 training)
+
+---
+
 *End of handover document. Single file, self-contained, ready to hand off. All decisions are final. Execution log continues above as phases complete.*
