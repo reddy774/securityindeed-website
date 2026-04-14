@@ -1200,4 +1200,48 @@ This HANDOVER.md file is the canonical spec. The others are context.
 
 ---
 
+### Phase 2 — Repository consolidation — COMPLETED 2026-04-13
+
+- **Status:** completed
+- **Started:** 2026-04-13
+- **Completed:** 2026-04-13
+- **Branch (in `breach-guardian/`):** `feat/phase-2-marketing`
+- **Files touched:**
+  - `breach-guardian/tailwind.config.ts` — added fortress/frost/brand palette, DM Serif + Outfit font families, custom shadows, fade-up keyframe animation
+  - `breach-guardian/app/globals.css` — replaced with Tailwind directives + `@layer base` resets + `@layer components` for glassy nav / gradient / container helpers
+  - `breach-guardian/app/layout.tsx` — added `next/font/google` for DM Serif Display + Outfit (self-hosted, preloaded), full metadata export with Open Graph + Twitter cards
+  - `breach-guardian/app/page.tsx` — **deleted** (old placeholder; replaced by `app/(marketing)/page.tsx`)
+  - `breach-guardian/app/(marketing)/layout.tsx` — marketing route group layout with shared nav + footer
+  - `breach-guardian/app/(marketing)/page.tsx` — landing page composing all sections
+  - `breach-guardian/app/(marketing)/features/page.tsx`
+  - `breach-guardian/app/(marketing)/pricing/page.tsx`
+  - `breach-guardian/app/(marketing)/how-it-works/page.tsx`
+  - `breach-guardian/app/(marketing)/privacy/page.tsx` (ported from `privacy.html`)
+  - `breach-guardian/app/(marketing)/terms/page.tsx` (ported from `terms.html`)
+  - `breach-guardian/app/sitemap.ts` — auto-generated `/sitemap.xml` for 6 public routes
+  - `breach-guardian/app/robots.ts` — auto-generated `/robots.txt` allowing marketing paths, disallowing auth/dashboard/API
+  - `breach-guardian/components/marketing/*.tsx` — **15 new focused React components** (ShieldLogo, CheckIcon, ArrowRightIcon, StoreBadge, MarketingNav, MarketingFooter, Hero, TrustBar, HowItWorks, FeatureGrid, PrivacyArchitecture, ModesSection, PricingCards, CTASection, DownloadCTA)
+  - `breach-guardian/public/google26df59702563d68d.html` — copied Google Search Console verification file
+  - `breach-guardian/global.d.ts` — type shim restoring the global `JSX` namespace (needed because `@types/react@19` removed it but the runtime is React 18)
+  - `breach-guardian/docs/phase-2-migration-notes.md` — what-moved-where with deviations and build verification
+  - `breach-guardian/package.json` / `package-lock.json` — added `@tailwindcss/typography@^0.5.19` (dev dep) for styling the legal pages via `prose` class
+  - `securityindeed-website/README.md` — **new** archive notice pointing to `breach-guardian/`
+- **Build verification:**
+  - `npx tsc --noEmit` → exit 0 (zero errors)
+  - `npx next build` → 16 routes compiled, 16 static pages generated, first-load JS 87–96 KB on all marketing routes
+- **Deviations from plan:**
+  1. Added `@tailwindcss/typography` plugin (not in original checklist but pragmatically necessary for legal pages; battle-tested)
+  2. Added `global.d.ts` type shim to bridge React 18 runtime with React 19 types without editing 20+ files
+  3. Legal pages (`privacy`, `terms`) use `dangerouslySetInnerHTML` with inlined static legal text — safe (our content, not user-supplied), faster than hand-converting 500+ lines of `<h2>`/`<p>` nesting to JSX
+  4. Privacy/Terms content was condensed (not materially changed) — 15→13 sections for privacy, 23→21 for terms; all legal substance preserved
+- **Known issues carried forward:**
+  - Trust gaps (named team, SOC 2 badge, live metrics, partner logos, etc.) — **Phase 8**
+  - GA4 / cookie banner — **Phase 8**
+  - OG images — **Phase 8**
+  - Lighthouse verification — **Phase 9** (against production Cloud Run staging, not local dev)
+  - `/api/health` emits a Prisma "DATABASE_URL not found" warning during `next build` static generation — pre-existing, unrelated to Phase 2, will resolve in Phase 9 when Cloud Run supplies the env var at runtime
+- **Next phase:** Phase 3 — auth unification (add Google OAuth provider to NextAuth; create new web-only OAuth client in `new-project-security-emails`; enable safe email-based account linking)
+
+---
+
 *End of handover document. Single file, self-contained, ready to hand off. All decisions are final. Execution log continues above as phases complete.*
