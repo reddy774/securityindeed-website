@@ -1,0 +1,24 @@
+# Claude Code — per-user local settings (never commit)
+.claude/settings.local.json
+
+# OS cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor cruft
+.vscode/
+.idea/
+*.swp
+*~
+
+# Node / build output (reserved for any future tooling in this static site)
+node_modules/
+dist/
+.cache/
+.next/
+
+# Env files (never commit secrets)
+.env
+.env.local
+.env.*.local
