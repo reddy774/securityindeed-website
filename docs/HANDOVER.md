@@ -1391,4 +1391,127 @@ This HANDOVER.md file is the canonical spec. The others are context.
 
 ---
 
+### Phase 5 — Vendor-agnostic billing (RevenueCat / Stripe) — COMPLETED 2026-04-14
+
+- **Status:** completed (StubBillingProvider default; real RevenueCat/Stripe wire-up deferred)
+- **Branch (in `breach-guardian/`):** `feat/phase-5-billing` (3 feature commits on top of the seed)
+  - `3052948` — fix(phase-5): align Entitlement schema with §7 spec
+  - `6a025de` — feat(billing): vendor-agnostic RevenueCat/Stripe billing
+  - `3dbfdb4` — security(phase-5): Mythos T2 audit remediation
+- **Files touched:** 21 new + 4 modified in `breach-guardian/`
+- **Full report:** `breach-guardian/docs/phase-5-billing-notes.md`
+- **Mythos T2 audit:** `breach-guardian/docs/security/mythos-audit-2026-04-14.md`
+
+**What shipped:**
+- **`lib/billing/` module:** `BillingProvider` interface (createCheckoutSession, getCustomerPortalUrl, getEntitlement, verifyWebhook, parseWebhook, deleteCustomer), `StubBillingProvider` default, `getProvider()` factory with production-stub guard, `isBillingBypassedForDev()` dev-only flag that short-circuits on `isProduction()` as the first line, `requireEntitlement()` gate reading Postgres directly (no cache, no vendor round-trip)
+- **`Entitlement` Prisma model** with `providerName`, `providerCustomerId`, `@@unique([userId, productId])`, `@@unique([providerName, providerCustomerId])` for cross-tenant webhook routing protection. Status enum: inactive (default) | active | canceled | expired | in_grace
+- **5 routes under `/api/billing/`:** `POST /checkout` (auth + CSRF + Zod enum productId + stub guard + URL allowlist), `GET /entitlement` (direct Postgres, omits providerName), `DELETE /entitlement` (DSAR — vendor deleteCustomer BEFORE local deleteMany for retry convergence), `POST /portal` (auth + CSRF), `POST /webhook` (unauth, HMAC on raw bytes, idempotent dedup via `webhook_events`, payload sanitization against prototype pollution, discriminated-union Zod validation)
+- **`/dashboard/billing` page** + mock-checkout + mock-portal (all `force-dynamic` so build-time prerender never hits the factory's production-stub guard)
+- **4 billing components:** `PricingTier` (server), `SubscribeButton` (client, with URL protocol allowlist defense-in-depth), `EntitlementCard` (renders managed-elsewhere read-only card for non-web platforms), `ManageSubscriptionButton`
+- **`/api/scrub/submit` now gated** via `requireEntitlement(auth.user.id, 'scrubbing')` — free users get FORBIDDEN with a generic message
+- **Middleware rate-limit buckets** for all `/api/billing/*` routes with session-cookie-hash keying (FNV-1a 32-bit) on billing-sensitive POSTs so an `X-Forwarded-For` spoof cannot earn fresh per-IP budgets while holding a single session
+
+**Mythos T2 audit — 3 high + 4 medium + 1 low fixed:**
+- F-H1 CVE-2025-29927 Next.js middleware bypass — NOT VULNERABLE (`next@14.2.35` ≥ 14.2.25)
+- F-H2 open redirect / `javascript:` URI via unvalidated provider URL → `lib/billing/url-safety.ts` server + client guards
+- F-H3 X-Forwarded-For rate-limit bypass → session-cookie-hash keying for billing/scrub buckets
+- F-H4 Host header CSRF bypass when NEXTAUTH_URL unset → fail-closed in production
+- F-M1 `FutureDateSchema` accepted past dates → `.refine` with 5-min clock skew
+- F-M2 `rawPayload` prototype pollution → `lib/billing/payload-sanitizer.ts` at webhook boundary
+- F-M4 GET entitlement missing catch-path audit log → fixed
+- F-L1 `providerName` in GET response → removed from SELECT
+- F-M3 DSAR delete race, F-L2 Stripe event-ordering gate → deferred to Phase 7
+
+**Security discipline (Phase 3+4 rubric plus new):**
+- Production-stub guard at factory level + route level; factory throws at startup if `BILLING_PROVIDER=stub` + `NODE_ENV=production`
+- `BILLING_BYPASS_IN_DEV` env flag literally cannot ship to prod (first-line `isProduction()` short circuit)
+- Cross-tenant webhook routing protection at DB layer via unique constraint — same pattern as Phase 4 `ScrubbingEnrollment`
+- Webhook HMAC verify BEFORE parse, 64 KiB body cap, raw-body read try/catch → 400 (not 500)
+- Idempotency via `webhook_events` INSERT-first with `billing:<eventId>` prefix
+- Every Prisma query scoped by `userId`
+- Feature gate reads Postgres fresh every call — no in-memory cache (stale cache = #1 subscription bug class)
+- Vendor-first delete on DSAR so retry converges to fully-deleted
+- Client bundle grep → zero hits on `STRIPE_SECRET_KEY`, `REVENUECAT_WEBHOOK_SECRET`, `GOCSPX`, `ENCRYPTION_KEY`, `SCRUBBING_WEBHOOK_SECRET`
+
+**GCP infrastructure:** no new secrets added this phase. Four placeholder secrets already exist from Phase 1 (`REVENUECAT_PUBLIC_SDK_KEY`, `REVENUECAT_WEBHOOK_SECRET`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`) awaiting real vendor accounts.
+
+**Build verification:**
+- `npx tsc --noEmit` → exit 0
+- `npx next build` → 34/34 pages compiled
+- All `/api/billing/*` and `/dashboard/billing*` routes dynamic (ƒ)
+
+**Known gaps carried forward:**
+- G1 — Real RevenueCatProvider / StripeProvider implementations (Phase 7)
+- G2 — Stripe-signature replay window (5-min timestamp check) (Phase 7)
+- G9 — `lastSyncedAt` event-ordering gate (Phase 7)
+- G10 — DSAR delete transactional outbox (Phase 7)
+
+**Next phase:** Phase 6 — MDX training runner (can run in parallel with Phase 7 hardening once pushed)
+
+---
+
+### Phase 6 — MDX training runner — COMPLETED 2026-04-14
+
+- **Status:** completed (content + runner + quiz + progress; legacy SCORM path preserved)
+- **Branch (in `breach-guardian/`):** `feat/phase-6-training` (`83aa0bb`)
+- **Files touched:** 16 new + 3 modified in `breach-guardian/`
+- **Full report:** `breach-guardian/docs/phase-6-training-notes.md`
+- **Mythos T2 audit:** `breach-guardian/docs/security/mythos-audit-2026-04-14-phase6.md`
+
+**What shipped:**
+- **`content/training/` directory** with 2 reference modules (phishing-basics + password-hygiene), each containing `module.json` + `index.mdx` + `quiz.json`. 5 questions per quiz. Content is in-repo and PR-reviewed — trusted content boundary.
+- **`lib/training/` module:** `ModuleIdSchema` (strict kebab-case regex closes path-traversal), `ModuleMetadataSchema`, `QuizSchema` with discriminator, `scoreQuiz` server-side scorer, `toClientQuiz` projection that strips `correctIndex` + `explanation` before quiz data leaves the server, `ProgressPostBodySchema` = `z.discriminatedUnion('kind', [section, quiz])` with `.strict()` on every variant
+- **Content loader (`lib/training/content.ts`)** — builds an in-memory `Map<id, {metadata, quiz, dirPath}>` once at server startup by walking `content/training/`. Validates every JSON file through Zod, throws at startup on any malformed file (Cloud Run health-check fails rather than shipping an empty catalog). Directory name ↔ `module.json.id` drift caught at startup. `getModuleMdxSource` derives its path from the cached `dirPath` — no user input ever reaches `fs.readFileSync`. `__resetTrainingCacheForTests` runtime-guarded to throw unless `NODE_ENV=test|development`.
+- **`TrainingProgress` Prisma model** with `@@unique([userId, moduleId])`, cascade on user delete, `attempts` counter for per-module cap enforcement
+- **2 routes under `/api/training/v2/`:** `POST /progress` (auth + CSRF + Zod discriminated-union + allowlist + `MAX_ATTEMPTS_PER_MODULE=50` cap + `prisma.upsert` split by event kind for race-free writes + server-side score recomputation), `GET /progress` (auth, returns user's full list)
+- **Legacy `/api/training/progress` + `/training/[courseId]` preserved** untouched as parallel path per §8
+- **`/dashboard/training` catalog page** + `/dashboard/training/[moduleId]` runner — both with explicit `getServerSession + redirect` defense-in-depth auth guards independent of the layout. Runner compiles MDX via `next-mdx-remote/rsc` inside a prose container. `generateMetadata` returns a generic title on any miss so it can't be used as an enumeration oracle.
+- **3 training components:** `ModuleCard` (server; prop renamed from `module` → `metadata` to satisfy `no-assign-module-variable` lint), `ProgressBadge`, `Quiz` (client island that collects answer indices and POSTs — never the score)
+- **Dashboard nav:** "Training" item added between Data scrubbing and Billing
+
+**Mythos T2 audit — 4 medium + 1 demoted-critical fixed:**
+- F-C1 No quiz rate limit (oracle attack via score feedback) — demoted critical → medium, fixed via `MAX_ATTEMPTS_PER_MODULE=50`
+- F-M3 TOCTOU on `findUnique+create` → `prisma.upsert` split by kind (atomic INSERT...ON CONFLICT)
+- F-M4 Failure audit log `userId: null` after auth succeeded → `authedUserId` hoisted above `try`
+- F-M1 `__resetTrainingCacheForTests` exported without runtime guard → throws in non-test env
+- F-H3 Runner page had no independent auth check → explicit `getServerSession + redirect` on both training pages
+- Enhancement: `generateMetadata` returns generic title on any miss (closes enumeration oracle)
+
+**CVEs verified closed by version floor:**
+- CVE-2026-0969 (next-mdx-remote RCE via JS expressions in braces, < 6.0.0) — NOT VULNERABLE (`next-mdx-remote@6.0.0` installed, `blockJS: true` default)
+- CVE-2025-55183 / 55184 (Next.js RSC source disclosure + DoS) — NOT VULNERABLE (`next@14.2.35`)
+
+**Security discipline (Phase 3+4+5 rubric + new):**
+- Strict kebab-case moduleId regex at the route boundary
+- Server-side content allowlist is the second gate after Zod
+- MDX source path derived only from the cached `dirPath`, never from user input
+- Server recomputes quiz score from stored `correctIndex` — Zod schema has NO `score` field
+- Client receives only `toClientQuiz` projection — `correctIndex` and `explanation` never reach the browser
+- Per-module attempts cap closes score-feedback oracle
+- `prisma.upsert` split by event kind so section events never touch `status` (can't regress a completed row)
+- Both pages have explicit auth guards instead of relying on the layout
+- Audit log captures `userId` even on failure (hoisted variable pattern)
+- `generateMetadata` never echoes attempted ids
+
+**Build verification:**
+- `npx prisma generate` → ok
+- `npx tsc --noEmit` → exit 0
+- `npx next build` → 36/36 pages compiled
+- New dynamic routes: `/api/training/v2/progress`, `/dashboard/training`, `/dashboard/training/[moduleId]`
+- Client bundle grep → zero hits on all known secret patterns
+
+**Known gaps carried forward:**
+- G-T1 Content-review CI grep for dangerous MDX patterns → Phase 7
+- G-T2 Append-only `TrainingProgress` with 7-year retention (SOC 2 CC1.4) → Phase 7
+- G-T3 Legacy SCORM route sunset plan → Phase 7
+- G-T4 CI version-floor on `next-mdx-remote >= 6.0.0` → Phase 7
+- G-T5 Regression test suite for every remediation (Phase 5 + Phase 6 both) → Phase 7 / follow-up commit
+- G-T6 Distributed rate limiter (Upstash Redis) → Phase 7
+- G-T7 In-process MDX compile cache → Phase 8 performance
+- G-T8 Pre-existing dev-dep vulnerabilities (handlebars via ts-jest, glob via eslint-plugin-next) → Phase 7 dep hygiene
+
+**Next phase:** Phase 7 — Hardening + compliance (MFA, DSAR completion, distributed rate limits, SOC 2 prep, vendor due-diligence) — OR Phase 9 Cloud Run deployment if time-to-first-user is the priority
+
+---
+
 *End of handover document. Single file, self-contained, ready to hand off. All decisions are final. Execution log continues above as phases complete.*
