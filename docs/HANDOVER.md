@@ -1287,4 +1287,56 @@ This HANDOVER.md file is the canonical spec. The others are context.
 
 ---
 
+### Phase 3 Security Remediation — COMPLETED 2026-04-13
+
+- **Status:** completed (12 fixes applied, 4 deferred with rationale)
+- **Branch (in `breach-guardian/`):** `feat/phase-3-auth` (commit `1d2077a`)
+- **Trigger:** Before starting Phase 4, ran a hard pre-launch security audit against best-in-market patterns. Two parallel streams — deep-research sweep (NextAuth v4 CVEs, OWASP ASVS, RFC 9700, nOAuth case study, NIST SP 800-63B Rev 4, Supabase/Clerk/Auth0/Firebase account-linking comparison) + independent code review + my own source re-read.
+- **Audit output:** 16 findings total — 4 Critical, 6 High, 5 Medium, 1 Low.
+- **Files touched:** 13 in `breach-guardian/` (4 new, 8 modified, 1 migration)
+- **Full report:** `breach-guardian/docs/phase-3-security-remediation.md` (every finding with evidence, fix, verification, and sources)
+
+**Critical fixes:**
+1. **Lockout bypass via Google OAuth** — the OAuth path reset `failedLoginAttempts`/`lockedUntil`, enabling trivial lockout escape. Fix: check lockout before allowing Google sign-in; never clear brute-force counters on OAuth.
+2. **Open redirect via `callbackUrl`** — `router.push(searchParams.get('callbackUrl'))` navigated anywhere. Fix: new `sanitizeCallbackUrl()` helper, applied at login page and GoogleSignInButton. Plus explicit `redirect` callback in NextAuth.
+3. **Dummy hash malformed base64 → timing attack email enumeration** — the hand-crafted dummy hash had invalid base64 lengths, causing `argon2.verify()` to throw fast (~µs) vs real verify (~250ms). Fix: module-scoped lazy-computed real Argon2id hash, cached for process lifetime. Constant timing across "user not found", "OAuth-only user tries password", and "wrong password".
+4. **Dead-code safe-linking path** — the Phase 3 initial cut assumed NextAuth's Prisma adapter would auto-link via the `signIn` callback's return value, but required `allowDangerousEmailAccountLinking: true` on the provider. Without the flag, 100% of "link Google to existing account" attempts would have failed with a generic error in production. Fix: set the flag + rewrite `signIn` to be the authoritative safety gate.
+
+**High fixes:**
+5. `passwordHash String? @db.Text` (nullable) + new Prisma migration. Removed dead `OAUTH_PASSWORD_HASH_PLACEHOLDER` code.
+6. Tight auth-route rate limits (5/15min per IP per instance) — mitigates the Cloud Run in-memory limiter limitation at MVP scale.
+7. Case-sensitive email lookup in Google signIn → lowercase + trim before findFirst.
+8. Role case mismatch in `requireOwnership` (`'ADMIN'` → `'admin'`).
+9. HIBP breached-password check on `/register` (k-anonymity, fails open on HIBP outage, new `lib/crypto/hibp.ts`).
+10. JWT revocation on soft-delete — lazy DB lookup in jwt callback with 60s per-process cache.
+
+**Medium fixes:**
+11. CSRF origin check on `/api/auth/register` (new `lib/auth/csrf.ts`).
+12. Prisma query log PII fix (`['query', 'error', 'warn']` → `['warn', 'error']`).
+13. Explicit `checks: ['pkce', 'state', 'nonce']` on Google provider.
+14. Generic OAuth error message (no account enumeration via `OAuthAccountNotLinked`).
+15. JWT `updateAge: 60 * 60` — cookie rotates on activity.
+
+**Deferred with explicit rationale:**
+- Auth0-style interactive re-auth for account linking → **Phase 7** (hardening + email verification)
+- Upstash Redis distributed rate limiting → **Phase 7**
+- Cloud SQL IAM-based auth (drop `DATABASE_URL` password) → **Phase 9**
+- Auth.js v5 migration → post-launch (v4 is patched, v5 still beta)
+
+**Non-findings verified as false positives:**
+- CVE-2025-29927 (Next.js middleware bypass): already patched — we're on 14.2.35 ≥ 14.2.25
+- Argon2id parameters "outdated": `m=65536` is OWASP's highest-memory profile, not less secure
+- `NEXTAUTH_SECRET` leaking to client bundle: `.next/static/chunks` grep confirmed zero hits
+
+**Build verification:**
+- `npx tsc --noEmit` → exit 0, zero errors
+- `npx next build` → 18/18 static pages, /login and /register at 108 kB First Load JS
+- Client bundle grep for secrets → zero hits
+
+**What this cost:** ~30 min parallel research + review agents, ~20 min my own verification + fixes. Would have cost orders of magnitude more to catch any of the 4 Critical issues in production. Worth it.
+
+**Next phase:** Phase 4 — vendor-agnostic scrubbing abstraction + StubProvider (unchanged from original plan)
+
+---
+
 *End of handover document. Single file, self-contained, ready to hand off. All decisions are final. Execution log continues above as phases complete.*
